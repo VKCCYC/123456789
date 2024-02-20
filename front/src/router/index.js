@@ -36,6 +36,16 @@ const routes = [
           login: false,
           admin: false
         }
+      },
+      {
+        path: 'products/:id',
+        name: 'products/:id',
+        component: () => import('@/views/front/ProductView.vue'),
+        meta: {
+          title: '出來喬 | 師傅 ',
+          login: false,
+          admin: false
+        }
       }
     ]
   }, {

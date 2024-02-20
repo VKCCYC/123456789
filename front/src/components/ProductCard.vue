@@ -42,9 +42,9 @@ const addCart = async () => {
       text: '新增成功',
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'green',
-        location: 'bottom'
+        timeout: 1500,
+        color: '#8C8987',
+        location: 'center'
       }
     })
   } catch (error) {
@@ -54,9 +54,9 @@ const addCart = async () => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'red',
-        location: 'bottom'
+        timeout: 1500,
+        color: 'error',
+        location: 'center'
       }
     })
   }

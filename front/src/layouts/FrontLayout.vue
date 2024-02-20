@@ -1,10 +1,13 @@
 <template lang="pug">
+//- 手機版側欄
 v-navigation-drawer.bg-color(v-model="drawer" temporary location="right" v-if="isMobile")
   v-list(nav)
     template(v-for="item in navItems" :key="item.to")
       v-list-item.color(exact :to="item.to"  v-if="item.show")
         template(#prepend)
           v-icon(:icon="item.icon")
+        template(#append)
+          v-badge(color="error" :content="user.cart" inline v-if="item.to === '/cart'")
         v-list-item-title {{ item.text }}
   template(v-slot:append)
     div.pa-2
@@ -14,11 +17,17 @@ v-app-bar(:elevation="24" color="#403635")
     v-btn(to="/" :active="false")
       v-icon.color mdi-hand-okay
       v-app-bar-title.color() 出來喬
+  //- 手機版
   template(v-if="isMobile")
     v-app-bar-nav-icon.color(@click="drawer = true")
+  //- 電腦版
   template(v-else)
     template( v-for="item in navItems" :key="item.to" )
       v-btn.color(exact :to="item.to" :icon="item.icon" v-if="item.show")
+        v-badge(color="error" :content="user.cart" v-if="item.to === '/cart'")
+          v-icon(:icon="item.icon" v-if="item.show")
+        template(v-else)
+          v-icon(:icon="item.icon" v-if="item.show")
     v-btn(icon="mdi-logout" v-if="user.isLogin" @click="logout")
 //- 頁面內容
 v-main
