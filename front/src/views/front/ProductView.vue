@@ -4,7 +4,8 @@ VContainer
     VCol(cols="12")
       h1 {{ product.name }}
     VCol(cols="12" md="6")
-      VImg(:src="product.image")
+      template(v-for="(img, index) in product.image" :key="index")
+          img(:src="img" width="33%")
     VCol(cols="12" md="6")
       p ${{ product.price }}
       p(style="white-space: pre;") {{ product.description }}
@@ -90,7 +91,7 @@ const submit = handleSubmit(async (values) => {
 
 onMounted(async () => {
   try {
-    const { data } = await api.get('/products/' + route.params.id)
+    const { data } = await api.get('/products/' + route.params._id)
     product.value._id = data.result._id
     product.value.name = data.result.name
     product.value.price = data.result.price
@@ -99,7 +100,7 @@ onMounted(async () => {
     product.value.sell = data.result.sell
     product.value.category = data.result.category
 
-    document.title = `購物網 | ${product.value.name}`
+    document.title = `出來喬 | ${product.value.name}`
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'

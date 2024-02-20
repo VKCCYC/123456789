@@ -38,8 +38,8 @@ const routes = [
         }
       },
       {
-        path: 'products/:id',
-        name: 'products/:id',
+        path: 'products/:_id',
+        name: 'Products',
         component: () => import('@/views/front/ProductView.vue'),
         meta: {
           title: '出來喬 | 師傅 ',
