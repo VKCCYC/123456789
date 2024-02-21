@@ -46,6 +46,24 @@ const routes = [
           login: false,
           admin: false
         }
+      }, {
+        path: 'cart',
+        name: 'Cart',
+        component: () => import('@/views/front/CartView.vue'),
+        meta: {
+          title: '出來喬 | 再次確認 ',
+          login: true,
+          admin: false
+        }
+      }, {
+        path: 'orders',
+        name: 'Orders',
+        component: () => import('@/views/front/OrdersView.vue'),
+        meta: {
+          title: '出來喬 | 訂單 ',
+          login: true,
+          admin: false
+        }
       }
     ]
   }, {

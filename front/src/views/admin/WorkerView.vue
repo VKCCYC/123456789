@@ -61,7 +61,7 @@ v-dialog.w-75(v-model="dialog" persistent v-if="isMobile")
         v-btn(color="red" :disabled="isSubmitting" @click="closeDialog") 取消
         v-btn(color="green" type="submit" :loading="isSubmitting") 送出
 
-v-dialog.w-50(v-model="dialog" v-else)
+v-dialog.w-50(v-model="dialog" persistent v-else)
   v-form(:disabled="isSubmitting" @submit.prevent="submit")
     v-card
       v-card-title {{ dialogId === '' ? '新增師傅' : '編輯師傅' }}

@@ -1,8 +1,9 @@
 <template lang="pug">
 VCard.card
-  RouterLink.color.text-decoration-none(:to="'/products/' +_id")
-    template(v-for="(img, index) in props.image" :key="index")
-      VImg(:src="img" height="200")
+  template(v-if='props.image && props.image.length > 0')
+    v-carousel(show-arrows='hover' hide-delimiters  progress="#403635")
+      v-carousel-item(v-for='(img, index) in props.image', :key='index' )
+        v-img(:src='img' height="100vh" @click='gogo(_id)')
   VCardTitle
     RouterLink.color.text-decoration-none(:to="'/products/' +_id") {{ name }}
   VCardSubtitle 一小時 ${{ price }}
@@ -26,6 +27,11 @@ const router = useRouter()
 
 // defineProps 這個元件有哪些可以接收的資料
 const props = defineProps(['_id', 'category', 'description', 'image', 'name', 'price', 'sell'])
+
+// 圖片跳轉
+const gogo = (id) => {
+  router.push(`/products/${id}`)
+}
 
 const addCart = async () => {
   if (!user.isLogin) {

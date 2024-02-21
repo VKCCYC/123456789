@@ -1,21 +1,30 @@
 <template lang="pug">
 VContainer
   VRow
-    VCol(cols="12")
+    VCol.titel(cols="12")
       h1 {{ product.name }}
     VCol(cols="12" md="6")
-      template(v-for="(img, index) in product.image" :key="index")
-          img(:src="img" width="33%")
-    VCol(cols="12" md="6")
-      p ${{ product.price }}
-      p(style="white-space: pre;") {{ product.description }}
+      template(v-if='product.image && product.image.length > 0')
+        v-carousel(show-arrows='hover' hide-delimiters  progress="#403635")
+          v-carousel-item(v-for='(img, index) in product.image', :key='index', :src='img')
+    VCol.my-auto(cols="12" md="6")
+      h2 1HR &nbsp  $ {{ product.price }}
+      p.my-3(style="white-space: pre;") {{ product.description }}
+      div &nbsp;
       VForm(:disabled="isSubmitting" @submit.prevent="submit")
-        VTextField(type="number" min="0" v-model="quantity.value.value" :error-messages="quantity.errorMessage.value")
-        VBtn(type="submit" prepend-icon="mdi-cart" color="success" :loading="isSubmitting") 加入購物車
+        VTextField(
+        type="text"
+        inputmode="numeric"
+        min="0" v-model="quantity.value.value"
+        :error-messages="quantity.errorMessage.value"
+        clearable variant="outlined"  :style="{ width: '300px' }")
+        div &nbsp;
+        VBtn.cart-btn(type="submit" prepend-icon="mdi-cart" :loading="isSubmitting") 加入購物車
 //- 單向綁定 :model-value, !product.sell=非上架
 VOverlay.align-center.justify-center.text-center(:model-value="!product.sell" persistent)
-  h1.text-red.text-h1.bg-white 已下架
-  VBtn(to="/" color="success") 回首頁
+  h1.textdown 已下架
+  div &nbsp
+  VBtn.color(to="/" block rounded="xl" elevation="20"  size="x-large") 回首頁
 </template>
 
 <script setup>
@@ -69,9 +78,9 @@ const submit = handleSubmit(async (values) => {
       text: '新增成功',
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'green',
-        location: 'bottom'
+        timeout: 1500,
+        color: '#8C8987',
+        location: 'center'
       }
     })
   } catch (error) {
@@ -81,9 +90,9 @@ const submit = handleSubmit(async (values) => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'red',
-        location: 'bottom'
+        timeout: 1500,
+        color: 'error',
+        location: 'center'
       }
     })
   }
@@ -100,7 +109,7 @@ onMounted(async () => {
     product.value.sell = data.result.sell
     product.value.category = data.result.category
 
-    document.title = `出來喬 | ${product.value.name}`
+    document.title = `出來喬師傅 | ${product.value.name}`
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
@@ -108,12 +117,34 @@ onMounted(async () => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'red',
-        location: 'bottom'
+        timeout: 1500,
+        color: 'error',
+        location: 'center'
       }
     })
     router.push('/')
   }
 })
 </script>
+
+<style scoped lang="sass">
+  .color
+    background-color:#BFB9B8
+    color: #16403C
+    font-weight: bolder
+    font-size: 2rem
+  .textdown
+    font-size: 300px
+    color: #403635
+    text-shadow: 10px 10px 30px #595552 ,10px 10px 10px #d9d5d2
+  .titel
+    font-size: 3rem
+    color: #D3894D
+    text-align: center
+  .cart-btn
+    background: #d9d5d2
+    color: #403635
+    margin-bottom: 5rem
+  .v-carousel-item
+    padding: 2rem
+  </style>

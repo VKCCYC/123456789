@@ -31,7 +31,7 @@ v-app-bar(:elevation="24" color="#403635")
     v-btn(icon="mdi-logout" v-if="user.isLogin" @click="logout")
 //- 頁面內容
 v-main
-  router-view
+  router-view(:key="$route.path")
 
 </template>
 
