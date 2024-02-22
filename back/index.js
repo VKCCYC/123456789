@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import routeUsers from './routes/users.js'
 import routeProducts from './routes/products.js'
+import routeOrders from './routes/orders.js'
 import { StatusCodes } from 'http-status-codes'
 import './passport/passport.js'
 
@@ -36,6 +37,7 @@ app.use((_, req, res, next) => {
 
 app.use('/users', routeUsers)
 app.use('/products', routeProducts)
+app.use('/orders', routeOrders)
 
 // all = get, post, ... 全部
 app.all('*', (req, res) => {
