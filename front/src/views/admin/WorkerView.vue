@@ -135,17 +135,25 @@ const openDialog = (item) => {
 const closeDialog = () => {
   dialog.value = false
   resetForm()
-  fileAgent.value.deleteFileRecord()
+  while (fileRecords.value.length > 0) {
+    fileAgent.value.deleteFileRecord(fileRecords.value[0])
+  }
 }
-
 // 分類
 const categories = ['生理男', '生理女']
 
 const schema = yup.object({
   name: yup.string().required('缺少師傅姓名'),
-  price: yup.number().typeError('商品價格格式錯誤').required('缺少時段價格').min(0, '價格不能小於0'),
+  price: yup
+    .number()
+    .typeError('商品價格格式錯誤')
+    .required('缺少時段價格')
+    .min(0, '價格不能小於0'),
   description: yup.string().required('缺少師傅說明'),
-  category: yup.string().required('缺少類別分類').test('isCategory', '商品分類錯誤', value => categories.includes(value)),
+  category: yup
+    .string()
+    .required('缺少類別分類')
+    .test('isCategory', '商品分類錯誤', (value) => categories.includes(value)),
   sell: yup.boolean()
 })
 
@@ -174,12 +182,12 @@ const submit = handleSubmit(async (values) => {
   if (fileRecords.value > 0 && fileRecords.value[0]?.error) return
   if (dialogId.value === '' && fileRecords.value.length === 0) return
   try {
-  // 要先建立一個物件叫 FormData
+    // 要先建立一個物件叫 FormData
     const fd = new FormData()
 
     // for in 是對物件的 key 去跑
     for (const key in values) {
-    // 一個一個加進去
+      // 一個一個加進去
       fd.append(key, values[key])
     }
 
@@ -207,7 +215,7 @@ const submit = handleSubmit(async (values) => {
       showCloseButton: false,
       // 要傳進 snackbarProps 元件的參數
       snackbarProps: {
-      // 1.5 秒鐘後消失
+        // 1.5 秒鐘後消失
         timeout: 1500,
         // 顏色
         color: '#8C8987',
@@ -228,7 +236,7 @@ const submit = handleSubmit(async (values) => {
       showCloseButton: false,
       // 要傳進 snackbarProps 元件的參數
       snackbarProps: {
-      // 1.5 秒鐘後消失
+        // 1.5 秒鐘後消失
         timeout: 1500,
         // 顏色
         color: 'error',
@@ -255,16 +263,14 @@ const tableItemsPerPageOption = [
   { value: -1, title: '$vuetify.dataFooter.itemsPerPageAll' }
 ]
 // 表格排序
-const tableSortBy = ref([
-  { key: 'name', order: 'desc' }
-])
+const tableSortBy = ref([{ key: 'name', order: 'desc' }])
 // 表格頁碼
 const tablePage = ref(1)
 // 表格商品資料陣列
 const tableProducts = ref([])
 // 表格欄位設定
 const tableHeaders = [
-// 標題要 title ; sortable 可不可以排序
+  // 標題要 title ; sortable 可不可以排序
   { title: '圖片', align: 'center', sortable: false, key: 'image[0]' },
   { title: '名稱', align: 'center', sortable: true, key: 'name' },
   { title: '價格', align: 'center', sortable: true, key: 'price' },
@@ -272,7 +278,6 @@ const tableHeaders = [
   { title: '分類', align: 'center', sortable: true, key: 'category' },
   { title: '上架', align: 'center', sortable: true, key: 'sell' },
   { title: '編輯', align: 'center', sortable: false, key: 'edit' }
-
 ]
 
 // 表格載入狀態
