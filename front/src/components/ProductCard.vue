@@ -26,7 +26,15 @@ const createSnackbar = useSnackbar()
 const router = useRouter()
 
 // defineProps 這個元件有哪些可以接收的資料
-const props = defineProps(['_id', 'category', 'description', 'image', 'name', 'price', 'sell'])
+const props = defineProps([
+  '_id',
+  'category',
+  'description',
+  'image',
+  'name',
+  'price',
+  'sell'
+])
 
 // 圖片跳轉
 const gogo = (id) => {
@@ -75,5 +83,4 @@ const addCart = async () => {
 .card
   background: #595552
   color: #D9D5D2
-
 </style>
