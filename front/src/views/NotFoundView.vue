@@ -29,7 +29,7 @@ const isMobile = computed(() => mobile.value)
 .xs
   font-size: 100px
 .md
-  font-size: 300px
+  font-size: 40vh
 .btn
   background-color: #8C8987
   color: #28231F
