@@ -48,9 +48,9 @@ onMounted(async () => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'red',
-        location: 'bottom'
+        timeout: 1500,
+        color: 'error',
+        location: 'center'
       }
     })
   }
