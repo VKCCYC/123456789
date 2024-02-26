@@ -12,12 +12,6 @@ VContainer
       p.my-3(style="white-space: pre;") {{ product.description }}
       div &nbsp;
       VForm(:disabled="isSubmitting" @submit.prevent="submit")
-        VTextField(
-        type="text"
-        inputmode="numeric"
-        min="0" v-model="quantity.value.value"
-        :error-messages="quantity.errorMessage.value"
-        clearable variant="outlined"  :style="{ width: '300px' }")
         div &nbsp;
         VBtn.cart-btn(type="submit" prepend-icon="mdi-clock-time-three-outline" :loading="isSubmitting" @click="openDialog()") 選擇時段
 
@@ -36,7 +30,7 @@ v-dialog.w-75(v-model="dialog" )
         v-text-field(v-model="product.name" variant="outlined" disabled )
         v-text-field(label="價格/1H" v-model="product.price" disabled)
 
-        v-autocomplete(v-model='friends', :disabled='isUpdating', :items='people', chips='', closable-chips='', color='blue-grey-lighten-2', item-title='names', item-value='names',multiple label="部位選擇")
+        v-autocomplete(v-model='friends', :disabled='isUpdating', :items='people', chips='', closable-chips, color='blue-grey-lighten-2', item-title='names', item-value='names',multiple label="部位選擇")
             template(v-slot:chip='{ props, item }')
               v-chip(v-bind='props', :prepend-avatar='item.raw.avatar', :text='item.raw.names')
             template(v-slot:item='{ props, item }')
@@ -45,6 +39,15 @@ v-dialog.w-75(v-model="dialog" )
         v-combobox(label="時段選擇" :items="['中午時段', '下午時段', '晚上時段']")
 
         v-textarea(label="備註" v-model="description01.value.value" )
+
+        VTextField(
+        label="時數"
+        type="text"
+        inputmode="numeric"
+        min="0" v-model="quantity.value.value"
+        :error-messages="quantity.errorMessage.value"
+        clearable)
+
       v-card-actions
         v-spacer
         v-btn(color="red" :disabled="isSubmitting" @click="closeDialog") 取消
@@ -172,7 +175,7 @@ const addCart = async () => {
   try {
     const { data } = await apiAuth.patch('/users/cart', {
       product: product.value._id,
-      quantity: 1
+      quantity: quantity.value.value
     })
     user.cart = data.result
     createSnackbar({
@@ -184,6 +187,7 @@ const addCart = async () => {
         location: 'center'
       }
     })
+    closeDialog()
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'

@@ -165,6 +165,7 @@ onMounted(async () => {
   try {
     const { data } = await apiAuth.get('/users/cart')
     cart.value.push(...data.result)
+    console.log(data.result)
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'

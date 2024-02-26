@@ -59,8 +59,8 @@ const drawer = ref(false)
 const navItems = computed(() => {
   return [
     { to: '/', icon: 'mdi-home', text: '首頁' },
-    { to: '/admin', icon: 'mdi-clipboard-plus-outline', text: '預約管理' },
-    { to: '/admin/worker', icon: 'mdi-clipboard-text-clock-outline', text: '師傅管理' },
+    { to: '/admin', icon: 'mdi-clipboard-text-clock-outline', text: '預約管理' },
+    { to: '/admin/worker', icon: 'mdi-clipboard-plus-outline', text: '師傅管理' },
     { to: '/admin/data', icon: 'mdi-poll', text: '觀看數據' }
   ]
 })

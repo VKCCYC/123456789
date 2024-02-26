@@ -8,7 +8,11 @@ VCard.card
     RouterLink.color.text-decoration-none(:to="'/products/' +_id") {{ name }}
   VCardSubtitle 一小時 ${{ price }}
   //- (style="white-space: pre;") 加這個才能正常顯示後端設定的換行符號
-  VCardText(style="white-space: pre;") {{ description }}
+  //- VCardText(style="white-space: pre;") {{ description }}
+  //- 你可以将 white-space 设置为 pre-wrap，这样可以保留文本中的换行符，
+  //- 并允许文本根据需要自动换行。这样在前端显示时，文本会根据容器的宽度自动换行，
+  //- 而后端添加的换行符仍然会被保留。
+  VCardText(style="white-space: pre-wrap;") {{ description }}
   VCardActions
     VBtn(color="#5FA5AE" prepend-icon="mdi-clock-time-three-outline" @click="openDialog()") 選擇時段
 
@@ -30,6 +34,15 @@ v-dialog.w-75(v-model="dialog" )
         v-combobox(label="時段選擇" :items="['中午時段', '下午時段', '晚上時段']")
 
         v-textarea(label="備註" v-model="description01.value.value" )
+
+        VTextField(
+        label="時數"
+        type="text"
+        inputmode="numeric"
+        min="0" v-model="quantity.value.value"
+        :error-messages="quantity.errorMessage.value"
+        clearable)
+
       v-card-actions
         v-spacer
         v-btn(color="red" :disabled="isSubmitting" @click="closeDialog") 取消
@@ -50,6 +63,8 @@ const { apiAuth } = useApi()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
 const router = useRouter()
+
+const quantity = useField('quantity')
 
 // defineProps 這個元件有哪些可以接收的資料
 const props = defineProps([
@@ -75,7 +90,7 @@ const addCart = async () => {
   try {
     const { data } = await apiAuth.patch('/users/cart', {
       product: props._id,
-      quantity: 1
+      quantity: quantity.value.value
     })
     user.cart = data.result
     createSnackbar({
