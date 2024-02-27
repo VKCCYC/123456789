@@ -26,6 +26,11 @@ import { useRouter } from 'vue-router'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useApi } from '@/composables/axios'
 
+// 登入
+import { useUserStore } from '@/store/user'
+
+const user = useUserStore()
+
 const { api } = useApi()
 
 const router = useRouter()
@@ -109,6 +114,12 @@ const submit = handleSubmit(async (values) => {
         location: 'center'
       }
     })
+    const { data } = await api.post('/users/login', {
+      account: values.account,
+      password: values.password
+    })
+    // 丟進 store 的 login function 裡面
+    user.login(data.result)
     router.push('/')
   } catch (error) {
     console.log(error)

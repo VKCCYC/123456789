@@ -22,13 +22,16 @@ v-row.d-flex.justify-center
       hover
     )
       template(#top)
-        VTextField(
+        VTextField.w-25(
           label="搜尋"
           v-model="tableSearch"
           clearable
           append-inner-icon="mdi-magnify"
           @click:append-inner="tableApplySearch"
-          @keydown.enter="tableApplySearch")
+          @keydown.enter="tableApplySearch"
+          style="margin-left: auto; margin-right: 1rem"
+          variant="underlined"
+          )
       template(#[`item.image[0]`]="{ item }")
         VImg(:src="item.image[0]" height="50px")
       template(#[`item.sell`]="{ item }")
