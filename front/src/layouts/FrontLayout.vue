@@ -21,7 +21,7 @@ v-app-bar(:elevation="24" color="#403635")
   template(v-if="isMobile")
     v-app-bar-nav-icon.color(@click="drawer = true")
   //- 電腦版
-  template(v-else)
+  template.d-flex(v-else)
     template( v-for="item in navItems" :key="item.to" )
       v-btn.color(exact :to="item.to" :icon="item.icon" v-if="item.show")
         v-badge(color="error" :content="user.cart" v-if="item.to === '/cart'")

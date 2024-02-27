@@ -9,7 +9,7 @@ VContainer
           v-carousel-item(v-for='(img, index) in product.image', :key='index', :src='img')
     VCol.my-auto(cols="12" md="6")
       h2 1HR &nbsp  $ {{ product.price }}
-      p.my-3(style="white-space: pre;") {{ product.description }}
+      p.my-3(style="white-space: pre-wrap;") {{ product.description }}
       div &nbsp;
       VForm(:disabled="isSubmitting" @submit.prevent="submit")
         div &nbsp;
@@ -31,22 +31,27 @@ v-dialog.w-75(v-model="dialog" )
         v-text-field(label="價格/1H" v-model="product.price" disabled)
 
         v-autocomplete(v-model='friends', :disabled='isUpdating', :items='people', chips='', closable-chips, color='blue-grey-lighten-2', item-title='names', item-value='names',multiple label="部位選擇")
-            template(v-slot:chip='{ props, item }')
-              v-chip(v-bind='props', :prepend-avatar='item.raw.avatar', :text='item.raw.names')
-            template(v-slot:item='{ props, item }')
-              v-list-item(v-bind='props', :prepend-avatar='item.raw.avatar', :title='item.raw.names', :subtitle='item.raw.group')
+          template(v-slot:chip='{ props, item }')
+            v-chip(v-bind='props', :prepend-avatar='item.raw.avatar', :text='item.raw.names')
+          template(v-slot:item='{ props, item }')
+            v-list-item(v-bind='props', :prepend-avatar='item.raw.avatar', :title='item.raw.names', :subtitle='item.raw.group')
 
         v-combobox(label="時段選擇" :items="['中午時段', '下午時段', '晚上時段']")
 
         v-textarea(label="備註" v-model="description01.value.value" )
 
-        VTextField(
-        label="時數"
-        type="text"
-        inputmode="numeric"
-        min="0" v-model="quantity.value.value"
-        :error-messages="quantity.errorMessage.value"
-        clearable)
+        v-row
+          v-col(cols="6")
+            VTextField(
+            label="時數"
+            type="text"
+            inputmode="numeric"
+            min="0" v-model="quantity.value.value"
+            :error-messages="quantity.errorMessage.value"
+            clearable)
+
+          v-col(cols="6")
+            v-text-field(type="date" )
 
       v-card-actions
         v-spacer
@@ -79,20 +84,31 @@ const product = ref({
   category: ''
 })
 
+// defineProps 這個元件有哪些可以接收的資料
+const props = defineProps([
+  '_id',
+  'category',
+  'description',
+  'image',
+  'name',
+  'price',
+  'sell'
+])
+
 const schema = yup.object({
   quantity: yup.number().typeError('格式錯誤').required('缺少數量').min(1, '數量最少為 1'),
-  name: yup.string().required('缺少師傅姓名')
+  name: yup.string().required('缺少師傅姓名'),
+  date: yup.date().required('請選擇日期')
 })
 
 const { isSubmitting, handleSubmit, resetForm } = useForm({
   validationSchema: schema,
   initialValues: {
+    name: props.name,
+    price: props.price,
     quantity: 1,
-    name: '',
-    price: 0,
     description: '',
-    category: '',
-    sell: false
+    date: ''
   }
 })
 const quantity = useField('quantity')
@@ -103,10 +119,24 @@ const submit = handleSubmit(async (values) => {
     return
   }
   try {
+    // // 要先建立一個物件叫 FormData
+    // const fd = new FormData()
+
+    // // for in 是對物件的 key 去跑
+    // for (const key in values) {
+    //   // 一個一個加進去
+    //   fd.append(key, values[key])
+    // }
+
     const { data } = await apiAuth.patch('/users/cart', {
       product: product.value._id,
       quantity: values.quantity
     })
+
+    // await apiAuth.post('/users/cart', {
+    //   date: product.value.date,
+    //   time: product.value.time
+    // })
     user.cart = data.result
     createSnackbar({
       text: '新增成功',
@@ -117,35 +147,6 @@ const submit = handleSubmit(async (values) => {
         location: 'center'
       }
     })
-  } catch (error) {
-    console.log(error)
-    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
-    createSnackbar({
-      text,
-      showCloseButton: false,
-      snackbarProps: {
-        timeout: 1500,
-        color: 'error',
-        location: 'center'
-      }
-    })
-  }
-  try {
-    createSnackbar({
-      text: '新增成功',
-      // 不要出現關閉的按鈕
-      showCloseButton: false,
-      // 要傳進 snackbarProps 元件的參數
-      snackbarProps: {
-        // 1.5 秒鐘後消失
-        timeout: 1500,
-        // 顏色
-        color: '#8C8987',
-        // 出現在螢幕中間
-        location: 'center'
-      }
-    })
-
     closeDialog()
   } catch (error) {
     console.log(error)
@@ -236,6 +237,10 @@ onMounted(async () => {
 const dialog = ref(false)
 
 const openDialog = () => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
   dialog.value = true
 }
 
@@ -249,10 +254,9 @@ const closeDialog = () => {
 
 const description01 = useField('description')
 
-const autoUpdate = ref(true)
 const friends = ref()
 const isUpdating = ref(false)
-const names = ref('')
+// const names = ref('')
 const people = ref([
   { names: ' 頭 ' },
   { names: ' 頸 ' },

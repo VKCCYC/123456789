@@ -26,10 +26,10 @@ v-dialog.w-75(v-model="dialog" )
         v-text-field(label="價格/1H" v-model="price01.value.value" disabled)
 
         v-autocomplete(v-model='friends', :disabled='isUpdating', :items='people', chips='', closable-chips='', color='blue-grey-lighten-2', item-title='names', item-value='names', label='Select', multiple='')
-            template(v-slot:chip='{ props, item }')
-              v-chip(v-bind='props', :prepend-avatar='item.raw.avatar', :text='item.raw.names')
-            template(v-slot:item='{ props, item }')
-              v-list-item(v-bind='props', :prepend-avatar='item.raw.avatar', :title='item.raw.names', :subtitle='item.raw.group')
+          template(v-slot:chip='{ props, item }')
+            v-chip(v-bind='props', :prepend-avatar='item.raw.avatar', :text='item.raw.names')
+          template(v-slot:item='{ props, item }')
+            v-list-item(v-bind='props', :prepend-avatar='item.raw.avatar', :title='item.raw.names', :subtitle='item.raw.group')
 
         v-combobox(label="時段選擇" :items="['中午時段', '下午時段', '晚上時段']")
 
@@ -42,6 +42,8 @@ v-dialog.w-75(v-model="dialog" )
         min="0" v-model="quantity.value.value"
         :error-messages="quantity.errorMessage.value"
         clearable)
+
+        v-date-picker.mx-auto(show-adjacent-months)
 
       v-card-actions
         v-spacer
@@ -102,6 +104,7 @@ const addCart = async () => {
         location: 'center'
       }
     })
+    closeDialog()
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
@@ -121,6 +124,10 @@ const addCart = async () => {
 const dialog = ref(false)
 
 const openDialog = () => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
   dialog.value = true
 }
 
@@ -133,6 +140,7 @@ const closeDialog = () => {
 // 分類
 
 const schema = yup.object({
+  quantity: yup.number().typeError('格式錯誤').required('缺少數量').min(1, '數量最少為 1'),
   name: yup.string().required('缺少師傅姓名')
 })
 
@@ -141,9 +149,8 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
   initialValues: {
     name: props.name,
     price: props.price,
-    description: '',
-    category: '',
-    sell: false
+    quantity: 1,
+    description: ''
   }
 })
 
@@ -190,10 +197,9 @@ const submit = handleSubmit(async (values) => {
   }
 })
 
-const autoUpdate = ref(true)
 const friends = ref()
 const isUpdating = ref(false)
-const names = ref('')
+// const names = ref('')
 const people = ref([
   { names: ' 頭 ' },
   { names: ' 頸 ' },

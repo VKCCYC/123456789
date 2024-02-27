@@ -13,6 +13,7 @@ router.get('/me', auth.jwt, getProfile)
 
 router.patch('/cart', auth.jwt, editCart)
 router.get('/cart', auth.jwt, getCart)
+router.post('/cart', auth.jwt, editCart)
 
 /*
 router.post('/login', auth.login, login): 当收到 POST 请求到 '/login' 路径时，先执行 auth.login 中间件，然后再执行 login 处理函数。这个路由似乎是用于处理用户登录的请求。
