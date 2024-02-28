@@ -33,6 +33,8 @@ v-app-bar(:elevation="24" color="#403635")
 v-main
   router-view(:key="$route.path")
 
+FooterCard
+
 </template>
 
 <script setup>
@@ -42,6 +44,7 @@ import { useUserStore } from '@/store/user'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useRouter } from 'vue-router'
+import FooterCard from '@/components/FooterCard.vue'
 
 const { apiAuth } = useApi()
 

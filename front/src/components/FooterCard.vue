@@ -5,30 +5,31 @@ v-footer.vf
       v-col(cols="12")
         h1 出來喬
 
-    v-row(justify='center', no-gutters='')
-      v-btn.mx-2(v-for='link in links', :key='link', color='#d9d5d2', variant='text', rounded='xl')
-        | {{ link }}
+    //- v-row.justify-space-between(no-gutters)
+    v-row.d-flex.align-start.flex-column.justify-space-between(no-gutters)
+      v-btn.mb-2(exact v-for='(link, i) in links',
+        :key='i', color='#d9d5d2',
+        variant='text', rounded='xl' :to="link.to")
+        | {{ link.name }}
       v-col.text-center.mt-4(cols='12')
-        | {{ new Date().getFullYear() }} &mdash;
-        strong Vuetify
+        | {{ new Date().getFullYear() }}
 
 </template>
 
 <script setup>
+
 const links = [
-  'Home',
-  'About Us',
-  'Team',
-  'Services',
-  'Blog',
-  'Contact Us'
+  { name: 'Home', to: '/' },
+  { name: 'About Us', to: '/about' },
+  { name: 'Team', to: '/about/product' }
 ]
 </script>
 
 <style scoped lang="sass">
 h1
   color: #d9d5d2
-  font-size: 3rem
+  margin: 1.5rem
+  margin-left: 0
 .vf
   background-color: #28231F
 </style>

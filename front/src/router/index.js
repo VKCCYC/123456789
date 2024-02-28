@@ -101,7 +101,34 @@ const routes = [
         }
       }
     ]
-  }, {
+  },
+  {
+    path: '/about',
+    component: () => import('@/layouts/FrontLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'About US',
+        component: () => import('@/views/about/AboutView.vue'),
+        meta: {
+          title: ' 關於我們 ',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'product',
+        name: 'Product',
+        component: () => import('@/components/ProductCard.vue'),
+        meta: {
+          title: '出來喬 | 師傅 ',
+          login: false,
+          admin: false
+        }
+      }
+    ]
+  },
+  {
     path: '/404',
     name: 'NotFound',
     component: () => import('@/views/NotFoundView.vue'),

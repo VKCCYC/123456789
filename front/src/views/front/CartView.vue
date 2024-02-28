@@ -72,7 +72,7 @@ const headers = [
   { title: '商品圖片', key: 'product.image' },
   { title: '商品名稱', key: 'product.name' },
   { title: '單價', key: 'product.price' },
-  { title: '數量', key: 'quantity' },
+  { title: '時數', key: 'quantity' },
   { title: '總價', key: 'total', value: item => item.product.price * item.quantity },
   { title: '刪除', key: 'action' }
   // 還需要其他欄位自己打
